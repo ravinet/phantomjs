@@ -566,8 +566,8 @@ void QNetworkAccessHttpBackend::postRequest()
         connect(delegate, SIGNAL(downloadFinished()),
                 this, SLOT(replyFinished()),
                 Qt::QueuedConnection);
-        connect(delegate, SIGNAL(downloadMetaData(QList<QPair<QByteArray,QByteArray> >,int,QString,bool,QSharedPointer<char>,qint64)),
-                this, SLOT(replyDownloadMetaData(QList<QPair<QByteArray,QByteArray> >,int,QString,bool,QSharedPointer<char>,qint64)),
+        connect(delegate, SIGNAL(downloadMetaData(QList<QPair<QByteArray,QByteArray> >,int,QString,QVariant,bool,QSharedPointer<char>,qint64)),
+                this, SLOT(replyDownloadMetaData(QList<QPair<QByteArray,QByteArray> >,int,QString,QVariant,bool,QSharedPointer<char>,qint64)),
                 Qt::QueuedConnection);
         connect(delegate, SIGNAL(downloadProgress(qint64,qint64)),
                 this, SLOT(replyDownloadProgressSlot(qint64,qint64)),
@@ -654,6 +654,7 @@ void QNetworkAccessHttpBackend::postRequest()
                     (delegate->incomingHeaders,
                      delegate->incomingStatusCode,
                      delegate->incomingReasonPhrase,
+		     delegate->incomingPeerNetworkAddress,
                      delegate->isPipeliningUsed,
                      QSharedPointer<char>(),
                      delegate->incomingContentLength);
@@ -664,6 +665,7 @@ void QNetworkAccessHttpBackend::postRequest()
                     (delegate->incomingHeaders,
                      delegate->incomingStatusCode,
                      delegate->incomingReasonPhrase,
+		     delegate->incomingPeerNetworkAddress,
                      delegate->isPipeliningUsed,
                      QSharedPointer<char>(),
                      delegate->incomingContentLength);
@@ -773,13 +775,14 @@ void QNetworkAccessHttpBackend::checkForRedirect(const int statusCode)
 
 void QNetworkAccessHttpBackend::replyDownloadMetaData
         (QList<QPair<QByteArray,QByteArray> > hm,
-         int sc,QString rp,bool pu,
+         int sc,QString rp, QVariant pna, bool pu,
          QSharedPointer<char> db,
          qint64 contentLength)
 {
     statusCode = sc;
     reasonPhrase = rp;
-
+    peerNetworkAddress = pna;
+	
     // Download buffer
     if (!db.isNull()) {
         reply->setDownloadBuffer(db, contentLength);
@@ -810,7 +813,9 @@ void QNetworkAccessHttpBackend::replyDownloadMetaData
 
     setAttribute(QNetworkRequest::HttpStatusCodeAttribute, statusCode);
     setAttribute(QNetworkRequest::HttpReasonPhraseAttribute, reasonPhrase);
-
+    
+    setAttribute(QNetworkRequest::PeerNetworkAddressAttribute, peerNetworkAddress);
+	
     // is it a redirection?
     checkForRedirect(statusCode);
 
@@ -963,6 +968,7 @@ bool QNetworkAccessHttpBackend::sendCacheContents(const QNetworkCacheMetaData &m
 
     setAttribute(QNetworkRequest::HttpStatusCodeAttribute, status);
     setAttribute(QNetworkRequest::HttpReasonPhraseAttribute, attributes.value(QNetworkRequest::HttpReasonPhraseAttribute));
+    //setAttribute(QNetworkRequest::PeerNetworkAddressAttribute, "cache");
     setAttribute(QNetworkRequest::SourceIsFromCacheAttribute, true);
 
     QNetworkCacheMetaData::RawHeaderList rawHeaders = metaData.rawHeaders();
@@ -1161,6 +1167,7 @@ QNetworkCacheMetaData QNetworkAccessHttpBackend::fetchCacheMetaData(const QNetwo
         // update the status code
         attributes.insert(QNetworkRequest::HttpStatusCodeAttribute, statusCode);
         attributes.insert(QNetworkRequest::HttpReasonPhraseAttribute, reasonPhrase);
+		
     } else {
         // this is a redirection, keep the attributes intact
         attributes = oldMetaData.attributes();

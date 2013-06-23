@@ -490,6 +490,9 @@ QUrl QNetworkReply::url() const
     return d_func()->url;
 }
 
+
+
+
 /*!
     Returns the value of the known header \a header, if that header
     was sent by the remote server. If the header was not sent, returns
@@ -745,6 +748,7 @@ void QNetworkReply::setUrl(const QUrl &url)
 {
     Q_D(QNetworkReply);
     d->url = url;
+	
 }
 
 /*!

@@ -117,7 +117,7 @@ private slots:
     // From HTTP thread:
     void replyDownloadData(QByteArray);
     void replyFinished();
-    void replyDownloadMetaData(QList<QPair<QByteArray,QByteArray> >,int,QString,bool,QSharedPointer<char>,qint64);
+    void replyDownloadMetaData(QList<QPair<QByteArray,QByteArray> >,int,QString,QVariant,bool,QSharedPointer<char>,qint64);
     void replyDownloadProgressSlot(qint64,qint64);
     void httpAuthenticationRequired(const QHttpNetworkRequest &request, QAuthenticator *auth);
     void httpError(QNetworkReply::NetworkError error, const QString &errorString);
@@ -137,6 +137,8 @@ private:
     QHttpNetworkRequest httpRequest; // There is also a copy in the HTTP thread
     int statusCode;
     QString reasonPhrase;
+    QVariant peerNetworkAddress;
+	
     // Will be increased by HTTP thread:
     QSharedPointer<QAtomicInt> pendingDownloadDataEmissions;
     QSharedPointer<QAtomicInt> pendingDownloadProgressEmissions;

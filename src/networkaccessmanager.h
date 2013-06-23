@@ -89,10 +89,11 @@ protected:
     QString m_userName;
     QString m_password;
     QNetworkReply *createRequest(Operation op, const QNetworkRequest & req, QIODevice * outgoingData = 0);
-    void handleFinished(QNetworkReply *reply, const QVariant &status, const QVariant &statusText);
+    void handleFinished(QNetworkReply *reply, const QVariant &status, const QVariant &statusText, const QVariant &peerNetworkAddress);
 
 signals:
     void resourceRequested(const QVariant& data, QObject *);
+    //void resourceRequested(const QVariant& data);
     void resourceReceived(const QVariant& data);
     void resourceError(const QVariant& data);
     void resourceTimeout(const QVariant& data);

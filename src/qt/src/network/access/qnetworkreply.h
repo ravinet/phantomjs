@@ -121,6 +121,8 @@ public:
     bool isRunning() const;
     QUrl url() const;
 
+	
+	
     // "cooked" headers
     QVariant header(QNetworkRequest::KnownHeaders header) const;
 
@@ -168,7 +170,7 @@ protected:
     void setHeader(QNetworkRequest::KnownHeaders header, const QVariant &value);
     void setRawHeader(const QByteArray &headerName, const QByteArray &value);
     void setAttribute(QNetworkRequest::Attribute code, const QVariant &value);
-
+	
 private:
     Q_DECLARE_PRIVATE(QNetworkReply)
 };

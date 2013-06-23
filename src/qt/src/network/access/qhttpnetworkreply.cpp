@@ -75,7 +75,20 @@ void QHttpNetworkReply::setUrl(const QUrl &url)
 {
     Q_D(QHttpNetworkReply);
     d->url = url;
+	
 }
+
+QVariant QHttpNetworkReply::peerNetworkAddress() const
+{
+	return d_func()->connectionChannel->socket->peerAddress().toString();
+	
+}
+
+void QHttpNetworkReply::setPeerNetworkAddress(const QVariant &addr)
+{
+	Q_D(QHttpNetworkReply);
+	d->peerNetworkAddress = addr;
+}   
 
 qint64 QHttpNetworkReply::contentLength() const
 {
@@ -582,6 +595,7 @@ bool QHttpNetworkReplyPrivate::parseStatus(const QByteArray &status)
     bool ok;
     statusCode = code.toInt(&ok);
     reasonPhrase = QString::fromLatin1(status.constData() + j + 1);
+	
 
     return ok && uint(majorVersion) <= 9 && uint(minorVersion) <= 9;
 }
@@ -627,7 +641,7 @@ qint64 QHttpNetworkReplyPrivate::readHeader(QAbstractSocket *socket)
             }
         }
     } while (!allHeaders && haveRead > 0);
-
+    // kept bracket for if
     // we received all headers now parse them
     if (allHeaders) {
         parseHeader(fragment);
@@ -645,7 +659,7 @@ qint64 QHttpNetworkReplyPrivate::readHeader(QAbstractSocket *socket)
             headerField("proxy-connection").toLower().contains("close")) ||
             (majorVersion == 1 && minorVersion == 0 &&
             (connectionHeaderField.isEmpty() && !headerField("proxy-connection").toLower().contains("keep-alive")));
-    }
+    } 
     return bytes;
 }
 

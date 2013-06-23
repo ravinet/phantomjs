@@ -327,7 +327,7 @@ void NetworkAccessManager::handleStarted()
     data["redirectURL"] = reply->header(QNetworkRequest::LocationHeader);
     data["headers"] = headers;
     data["time"] = QDateTime::currentDateTime();
-
+	
     emit resourceReceived(data);
 }
 
@@ -338,8 +338,9 @@ void NetworkAccessManager::handleFinished(QNetworkReply *reply)
 
     QVariant status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
     QVariant statusText = reply->attribute(QNetworkRequest::HttpReasonPhraseAttribute);
-
-    this->handleFinished(reply, status, statusText);
+    QVariant peerNetworkAddress = reply->attribute(QNetworkRequest::PeerNetworkAddressAttribute);
+	
+    this->handleFinished(reply, status, statusText, peerNetworkAddress);
 }
 
 void NetworkAccessManager::provideAuthentication(QNetworkReply *reply, QAuthenticator *authenticator)
@@ -352,12 +353,12 @@ void NetworkAccessManager::provideAuthentication(QNetworkReply *reply, QAuthenti
     else
     {
         m_authAttempts = 0;
-        this->handleFinished(reply, 401, "Authorization Required");
+        this->handleFinished(reply, 401, "Authorization Required", 0);
         reply->close();
     }
 }
 
-void NetworkAccessManager::handleFinished(QNetworkReply *reply, const QVariant &status, const QVariant &statusText)
+void NetworkAccessManager::handleFinished(QNetworkReply *reply, const QVariant &status, const QVariant &statusText, const QVariant &peerNetworkAddress)
 {
     QVariantList headers;
     foreach (QByteArray headerName, reply->rawHeaderList()) {
@@ -373,6 +374,7 @@ void NetworkAccessManager::handleFinished(QNetworkReply *reply, const QVariant &
     data["url"] = reply->url().toEncoded().data();
     data["status"] = status;
     data["statusText"] = statusText;
+    data["peerNetworkAddress"] = peerNetworkAddress; 
     data["contentType"] = reply->header(QNetworkRequest::ContentTypeHeader);
     data["redirectURL"] = reply->header(QNetworkRequest::LocationHeader);
     data["headers"] = headers;

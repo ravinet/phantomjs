@@ -204,6 +204,8 @@ public:
     qint64 preMigrationDownloaded;
 
     QString httpReasonPhrase;
+    QString peerNetworkAddressX;
+	
     int httpStatusCode;
 
     State state;

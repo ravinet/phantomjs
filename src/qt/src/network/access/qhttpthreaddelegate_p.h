@@ -110,6 +110,9 @@ public:
     QList<QPair<QByteArray,QByteArray> > incomingHeaders;
     int incomingStatusCode;
     QString incomingReasonPhrase;
+    QVariant incomingPeerNetworkAddress;
+	
+	
     bool isPipeliningUsed;
     qint64 incomingContentLength;
     QNetworkReply::NetworkError incomingErrorCode;
@@ -138,7 +141,7 @@ signals:
     void sslErrors(const QList<QSslError> &, bool *, QList<QSslError> *);
     void sslConfigurationChanged(const QSslConfiguration);
 #endif
-    void downloadMetaData(QList<QPair<QByteArray,QByteArray> >,int,QString,bool,QSharedPointer<char>,qint64);
+    void downloadMetaData(QList<QPair<QByteArray,QByteArray> >,int,QString,QVariant,bool,QSharedPointer<char>,qint64);
     void downloadProgress(qint64, qint64);
     void downloadData(QByteArray);
     void error(QNetworkReply::NetworkError, const QString);

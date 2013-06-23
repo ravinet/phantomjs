@@ -71,6 +71,7 @@ public:
     enum Attribute {
         HttpStatusCodeAttribute,
         HttpReasonPhraseAttribute,
+	PeerNetworkAddressAttribute, // SGW test
         RedirectionTargetAttribute,
         ConnectionEncryptedAttribute,
         CacheLoadControlAttribute,
@@ -86,6 +87,7 @@ public:
         MaximumDownloadBufferSizeAttribute, // internal
         DownloadBufferAttribute, // internal
         SynchronousRequestAttribute, // internal
+		
 
         User = 1000,
         UserMax = 32767
@@ -118,7 +120,7 @@ public:
 
     QUrl url() const;
     void setUrl(const QUrl &url);
-
+	
     // "cooked" headers
     QVariant header(KnownHeaders header) const;
     void setHeader(KnownHeaders header, const QVariant &value);

@@ -90,6 +90,9 @@ public:
 
     QUrl url() const;
     void setUrl(const QUrl &url);
+	
+    //QVariant peerNetworkAddress() const;
+    //void setPeerNetworkAddress(const QVariant &address);
 
     int majorVersion() const;
     int minorVersion() const;

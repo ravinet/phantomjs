@@ -86,7 +86,6 @@ bool QNetworkAccessCacheBackend::sendCacheContents()
     QNetworkCacheMetaData::AttributesMap attributes = item.attributes();
     setAttribute(QNetworkRequest::HttpStatusCodeAttribute, attributes.value(QNetworkRequest::HttpStatusCodeAttribute));
     setAttribute(QNetworkRequest::HttpReasonPhraseAttribute, attributes.value(QNetworkRequest::HttpReasonPhraseAttribute));
-
     // set the raw headers
     QNetworkCacheMetaData::RawHeaderList rawHeaders = item.rawHeaders();
     QNetworkCacheMetaData::RawHeaderList::ConstIterator it = rawHeaders.constBegin(),

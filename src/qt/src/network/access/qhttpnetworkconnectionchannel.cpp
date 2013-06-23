@@ -352,8 +352,8 @@ void QHttpNetworkConnectionChannel::_q_receiveReply()
     }
 
     QAbstractSocket::SocketState socketState = socket->state();
-
-    // connection might be closed to signal the end of data
+		
+	// connection might be closed to signal the end of data
     if (socketState == QAbstractSocket::UnconnectedState) {
         if (socket->bytesAvailable() <= 0) {
             if (reply->d_func()->state == QHttpNetworkReplyPrivate::ReadingDataState) {

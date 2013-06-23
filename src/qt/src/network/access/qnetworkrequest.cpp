@@ -395,6 +395,7 @@ void QNetworkRequest::setUrl(const QUrl &url)
     d->url = url;
 }
 
+
 /*!
     Returns the value of the known network header \a header if it is
     present in this request. If it is not present, returns QVariant()

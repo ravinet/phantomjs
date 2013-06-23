@@ -72,7 +72,7 @@ public:
     QNetworkAccessManager::Operation operation;
     QNetworkReply::NetworkError errorCode;
     bool isFinished;
-
+	
     static inline void setManager(QNetworkReply *reply, QNetworkAccessManager *manager)
     { reply->d_func()->manager = manager; }
 
